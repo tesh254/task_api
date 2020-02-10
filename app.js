@@ -4,12 +4,14 @@ const random = require("lodash.random");
 const times = require("lodash.times");
 const logger = require("morgan");
 const bodyParser = require("body-parser");
+const passport = require("passport")
 const db = require("./database/models");
 const passwordHelpers = require("./helpers/bcrypt");
 const dataHelpers = require("./helpers/date");
 
 // routes
 const authAPI = require("./controllers/auth");
+const taskAPI = require("./controllers/tasks");
 
 require("./helpers/passport")
 
@@ -25,7 +27,7 @@ app.use(logger("dev"));
 app.set("port", process.env.PORT || 4567);
 
 app.use("/auth", authAPI);
-
+app.use("/tasks", passport.authenticate('jwt', { session: false }), taskAPI)
 app.use(function(err, req, res, next) {
   res.status(err.status || 500)
   res.json({ message: err.message })
@@ -56,7 +58,7 @@ db.sequelize.sync().then(() => {
 
   // Generate tasks records
   db.Task.bulkCreate(
-    times(10, () => ({
+    times(30, () => ({
       task_id: random(1000, 9999),
       customer_first_name: faker.name.firstName(),
       personnel_first_name: faker.name.firstName(),
