@@ -2,10 +2,16 @@ const express = require("express");
 const faker = require("faker");
 const random = require("lodash.random");
 const times = require("lodash.times");
+const logger = require("morgan");
 const bodyParser = require("body-parser");
 const db = require("./database/models");
 const passwordHelpers = require("./helpers/bcrypt");
 const dataHelpers = require("./helpers/date");
+
+// routes
+const authAPI = require("./controllers/auth");
+
+require("./helpers/passport")
 
 const app = express();
 
@@ -13,8 +19,17 @@ app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
+app.use(logger("dev"));
+
 // Set port
 app.set("port", process.env.PORT || 4567);
+
+app.use("/auth", authAPI);
+
+app.use(function(err, req, res, next) {
+  res.status(err.status || 500)
+  res.json({ message: err.message })
+})
 
 // Generate dummy data
 db.sequelize.sync().then(() => {
@@ -23,7 +38,7 @@ db.sequelize.sync().then(() => {
   db.Task.destroy({ where: {}, truncate: true });
   // add data to User tale
   db.User.bulkCreate(
-    times(5, () => ({
+    times(2, () => ({
       name: faker.name.firstName(),
       phonenumber: `07${random(1, 99999999)}`,
       password: passwordHelpers.generatePasswordHash(faker.lorem.text(6))
@@ -64,9 +79,10 @@ db.sequelize.sync().then(() => {
       registration: "Self"
     }))
   );
-  app.listen(app.get("port"), () => {
-    console.log(`Server is running on port ${app.get("port")}`);
-  });
+});
+
+app.listen(app.get("port"), () => {
+  console.log(`Server is running on port ${app.get("port")}`);
 });
 
 module.exports = app;
