@@ -14,6 +14,7 @@ api.post("/login", async (req, res, next) => {
       }
 
       req.login(user, { session: false }, async error => {
+        /* istanbul ignore next */
         if (error) return next(error);
 
         const token = jwt.sign(user.phonenumber, env.secretKey);
@@ -21,6 +22,7 @@ api.post("/login", async (req, res, next) => {
         return res.json({ token });
       });
     } catch (error) {
+      /* istanbul ignore next */
       return next(error);
     }
   })(req, res, next)

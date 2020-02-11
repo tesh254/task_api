@@ -9,7 +9,9 @@ const config = require(__dirname + '/../config/config.json')[env];
 const db = {};
 
 let sequelize;
+/* istanbul ignore next */
 if (config.use_env_variable) {
+  /* istanbul ignore next */
   sequelize = new Sequelize(process.env[config.use_env_variable], config);
 } else {
   sequelize = new Sequelize(config.database, config.username, config.password, {
@@ -28,6 +30,7 @@ fs
     db[model.name] = model;
   });
 
+/* istanbul ignore next */
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {
     db[modelName].associate(db);

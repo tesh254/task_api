@@ -36,6 +36,7 @@ passport.use(
 
         return done(null, user, { message: "Logged in successfully" });
       } catch (error) {
+        /* istanbul ignore next */
         done(error);
       }
     }
@@ -49,10 +50,10 @@ passport.use(
       jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken()
     },
     async (token, done) => {
-        console.log(token)
       try {
         return done(null, token);
       } catch (error) {
+        /* istanbul ignore next */
         done({
           message: "Unauthorized, please login"
         });
