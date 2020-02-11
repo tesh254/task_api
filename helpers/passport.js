@@ -22,7 +22,11 @@ passport.use(
         });
 
         if (!user) {
-          return done(null, false, { message: "User not found" });
+          return done(null, false, {
+            error: {
+              message: "User not found"
+            }
+          });
         }
 
         const validate = await passwordHelpers.comparePasswordHash(
@@ -31,7 +35,11 @@ passport.use(
         );
 
         if (!validate) {
-          return done(null, false, { message: "Wrong password" });
+          return done(null, false, {
+            error: {
+              password: "You have entered an incorrect password"
+            }
+          });
         }
 
         return done(null, user, { message: "Logged in successfully" });
@@ -55,7 +63,9 @@ passport.use(
       } catch (error) {
         /* istanbul ignore next */
         done({
-          message: "Unauthorized, please login"
+          error: {
+            message: "Unauthorized, please login"
+          }
         });
       }
     }

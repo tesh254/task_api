@@ -81,10 +81,10 @@ db.sequelize.sync().then(() => {
       registration: "Self"
     }))
   );
-});
 
-app.listen(app.get("port"), () => {
-  console.log(`Server is running on port ${app.get("port")}`);
+  app.listen(app.get("port"), () => {
+    console.log(`Server is running on port ${app.get("port")}`);
+  });
 });
 
 module.exports = app;

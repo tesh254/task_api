@@ -8,6 +8,20 @@ chai.use(chaiHttp);
 const { expect } = chai;
 
 describe("Testing login endpoint", () => {
+  it("should login unsuccessfully due to wrong password", done => {
+    chai
+      .request(app)
+      .post("/auth/login")
+      .set("Content-Type", "application/json")
+      .send({
+        phonenumber: "0705181707",
+        password: "test25"
+      })
+      .end((err, res) => {
+        expect(res.status).to.equal(500);
+        done();
+      });
+  });
   it("should login successfully", done => {
     chai
       .request(app)
@@ -34,6 +48,7 @@ describe("Testing login endpoint", () => {
       })
       .end((err, res) => {
         expect(res.status).to.equal(500);
+        expect(res.body.message).to.equal("User not found");
         done();
       });
   });
@@ -43,22 +58,9 @@ describe("Testing login endpoint", () => {
       .request(app)
       .post("/auth/login")
       .set("Content-Type", "application/json")
-    //   .send({})
+      .send({})
       .end((err, res) => {
         expect(res.status).to.equal(500);
-        done();
-      });
-  });
-
-  it("should login unsuccessfully due to wrong password", done => {
-    chai
-      .request(app)
-      .post("/auth/login")
-      .set("Content-Type", "application/json")
-      .send({phonenumber: "0705181707", password: "test25"})
-      .end((err, res) => {
-        expect(res.status).to.equal(500);
-        expect(res.body.message).to.equal("Wrong password")
         done();
       });
   });
