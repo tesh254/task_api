@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=testing && nyc mocha ./test --timeout 20000 --exit"
+    "test": "NODE_ENV=testing && nyc mocha ./test --timeout 20000 --exit",
+    "coveralls": "nyc report --reporter=text-lcov | coveralls",
+    "cover": "NODE_ENV=testing nyc mocha ./test --timeout 20000 --exit",
+    "start": "node app.js",
+    "dev": "NODE_ENV=development node app.js"
   },
   "repository": {
     "type": "git",
@@ -20,6 +24,7 @@
   "dependencies": {
     "bcrypt": "^3.0.8",
     "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "faker": "^4.1.0",
@@ -39,6 +44,7 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
+    "coveralls": "^3.0.9",
     "mocha": "^7.0.1",
     "nyc": "^15.0.0",
     "supertest": "^4.0.2"

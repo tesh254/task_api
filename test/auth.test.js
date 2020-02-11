@@ -8,17 +8,17 @@ chai.use(chaiHttp);
 const { expect } = chai;
 
 describe("Testing login endpoint", () => {
-  it("should login successfully", done => {
+  it("should login unsuccessfully due to wrong password", done => {
     chai
       .request(app)
       .post("/auth/login")
       .set("Content-Type", "application/json")
       .send({
         phonenumber: "0705181707",
-        password: "test254"
+        password: "test25"
       })
       .end((err, res) => {
-        expect(res.status).to.equal(200);
+        expect(res.status).to.equal(400);
         done();
       });
   });
@@ -33,7 +33,7 @@ describe("Testing login endpoint", () => {
         password: "test254"
       })
       .end((err, res) => {
-        expect(res.status).to.equal(500);
+        expect(res.body.error.message).to.equal("User not found");
         done();
       });
   });
@@ -43,22 +43,24 @@ describe("Testing login endpoint", () => {
       .request(app)
       .post("/auth/login")
       .set("Content-Type", "application/json")
-    //   .send({})
+      .send({})
       .end((err, res) => {
-        expect(res.status).to.equal(500);
+        console.log(res.body);
+        expect(res.body.message).to.equal("Missing credentials");
         done();
       });
   });
-
-  it("should login unsuccessfully due to wrong password", done => {
+  it("should login successfully", done => {
     chai
       .request(app)
       .post("/auth/login")
       .set("Content-Type", "application/json")
-      .send({phonenumber: "0705181707", password: "test25"})
+      .send({
+        phonenumber: "0705181707",
+        password: "test254"
+      })
       .end((err, res) => {
-        expect(res.status).to.equal(500);
-        expect(res.body.message).to.equal("Wrong password")
+        expect(res.status).to.equal(200);
         done();
       });
   });

@@ -3,7 +3,7 @@ const db = require("../database/models");
 
 const api = express.Router();
 
-api.get("/all", async (req, res, next) => {
+api.get("/assigned", async (req, res, next) => {
   // Pagination Logic
   let page = parseInt(req.query.page, 10);
   let size = parseInt(req.query.limit, 10);
@@ -12,9 +12,6 @@ api.get("/all", async (req, res, next) => {
 
   if (page <= 0 || !page) {
     page = 1;
-  }
-  if (size > 5 || size < 0) {
-    size = 5;
   }
 
   const tasks = await db.Task.findAndCountAll({

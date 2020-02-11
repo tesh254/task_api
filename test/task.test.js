@@ -13,7 +13,7 @@ describe("Testing task endpoint", () => {
   it("should fail to fetch all task without login", done => {
     chai
       .request(app)
-      .get("/tasks/all?page=1&limit=5&order=createdAt&orderMethod=DESC")
+      .get("/tasks/assigned?page=1&limit=5&order=createdAt&orderMethod=DESC")
       .set("Content-Type", "application/json")
       .end((err, res) => {
         expect(res.status).to.equal(401);
@@ -26,7 +26,7 @@ describe("Testing task endpoint", () => {
 
     chai
       .request(app)
-      .get("/tasks/all?page=1&limit=5&order=createdAt&orderMethod=DESC")
+      .get("/tasks/assigned?page=1&limit=5&order=createdAt&orderMethod=DESC")
       .set("Authorization", `Bearer ${newToken}`)
       .end((err, res) => {
         expect(res.status).to.equal(200);
@@ -39,7 +39,7 @@ describe("Testing task endpoint", () => {
 
     chai
       .request(app)
-      .get("/tasks/all?page=-1&limit=5&order=createdAt&orderMethod=DESC")
+      .get("/tasks/assigned?page=-1&limit=5&order=createdAt&orderMethod=DESC")
       .set("Authorization", `Bearer ${newToken}`)
       .end((err, res) => {
         expect(res.status).to.equal(200);
@@ -52,7 +52,7 @@ describe("Testing task endpoint", () => {
 
     chai
       .request(app)
-      .get("/tasks/all?page=-1&limit=6&order=createdAt&orderMethod=DESC")
+      .get("/tasks/assigned?page=-1&limit=6&order=createdAt&orderMethod=DESC")
       .set("Authorization", `Bearer ${newToken}`)
       .end((err, res) => {
         expect(res.status).to.equal(200);
