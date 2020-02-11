@@ -13,27 +13,21 @@ api.get("/all", async (req, res, next) => {
   if (page <= 0 || !page) {
     page = 1;
   }
-  if (size > 5) {
+  if (size > 5 || size < 0) {
     size = 5;
   }
 
-  const tasks = await db.Task.findAll({
+  const tasks = await db.Task.findAndCountAll({
     order: [[order, orderMethod]],
     limit: size,
     offset: size * page
   });
 
-  if (tasks.length === 0) {
-    res.status(200).json({
-      page: 1,
-      perPage: 5,
-      totalTasks: 0,
-      tasks: []
-    });
-  }
-
   res.status(200).json({
-    tasks
+    totalTasks: tasks.count,
+    page,
+    perPage: 5,
+    tasks: tasks.rows
   });
 });
 
